@@ -1,0 +1,209 @@
+{
+  "generated_by_isoloom": "from isoloom.yml; don't edit: change the spec and run `isoloom generate` (`isoloom check` fails when this file is out of date)",
+  "resolved_version": 1,
+  "name": "vulhub-php-xdebug-rce",
+  "instance": null,
+  "inputs": [],
+  "networks": {
+    "lab": {
+      "cidr": "10.60.240.0/24",
+      "docker_cidr": "10.60.240.0/24",
+      "internet": true,
+      "gateway": null,
+      "gateway_address": "10.60.240.1",
+      "router": null,
+      "controller": "10.60.240.253"
+    }
+  },
+  "reach": [],
+  "machines": {
+    "xdebug2": {
+      "access": false,
+      "supplied": false,
+      "shapes": [
+        "docker"
+      ],
+      "arch": "amd64",
+      "os": null,
+      "windows": false,
+      "addresses": {
+        "lab": "10.60.240.10"
+      },
+      "docker_addresses": {
+        "lab": "10.60.240.10"
+      },
+      "services": [
+        {
+          "port": 80,
+          "name": "web",
+          "http": true,
+          "publish": 8080
+        }
+      ],
+      "depends_on": [],
+      "inputs": [],
+      "volumes": {},
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 256,
+        "disk_gb": 20
+      },
+      "gateway_of": [],
+      "routes": [],
+      "default_gateway": null,
+      "offline": false
+    },
+    "xdebug3": {
+      "access": false,
+      "supplied": false,
+      "shapes": [
+        "docker"
+      ],
+      "arch": "amd64",
+      "os": null,
+      "windows": false,
+      "addresses": {
+        "lab": "10.60.240.11"
+      },
+      "docker_addresses": {
+        "lab": "10.60.240.11"
+      },
+      "services": [
+        {
+          "port": 80,
+          "name": "web",
+          "http": true,
+          "publish": 8081
+        }
+      ],
+      "depends_on": [],
+      "inputs": [],
+      "volumes": {},
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 256,
+        "disk_gb": 20
+      },
+      "gateway_of": [],
+      "routes": [],
+      "default_gateway": null,
+      "offline": false
+    }
+  },
+  "start_order": [
+    "xdebug2",
+    "xdebug3"
+  ],
+  "clones": {},
+  "tools": {},
+  "groups": {},
+  "router": null,
+  "controller": {
+    "addresses": {
+      "lab": "10.60.240.253"
+    }
+  },
+  "published": [
+    {
+      "machine": "xdebug2",
+      "port": 80,
+      "host_port": 8080
+    },
+    {
+      "machine": "xdebug3",
+      "port": 80,
+      "host_port": 8081
+    }
+  ],
+  "targets": {
+    "possible": [
+      "docker",
+      "hosted",
+      "docker-vm",
+      "cloud-docker",
+      "kubernetes"
+    ],
+    "generated": [
+      "docker",
+      "hosted",
+      "docker-vm",
+      "cloud-docker",
+      "kubernetes"
+    ],
+    "refused": {},
+    "not_possible": {
+      "hybrid": "only when some machines are containers and others are VMs",
+      "vagrant": "needs `vm:` on xdebug2, xdebug3",
+      "proxmox": "needs `vm:` on xdebug2, xdebug3",
+      "cloud-vm": "needs `vm:` on xdebug2, xdebug3",
+      "external": "needs `external:` on xdebug2, xdebug3"
+    }
+  },
+  "checks": {
+    "default_position": "networks",
+    "positions": [
+      {
+        "position": "networks",
+        "machine": null,
+        "runner": "isoloom-check",
+        "checks": [
+          {
+            "name": "the XDebug 2 site answers",
+            "derived": false,
+            "kind": "http",
+            "target": "http://xdebug2/",
+            "expect": "200",
+            "wait": 60
+          },
+          {
+            "name": "the XDebug 3 site answers",
+            "derived": false,
+            "kind": "http",
+            "target": "http://xdebug3/",
+            "expect": "200",
+            "wait": 60
+          },
+          {
+            "name": "both sites run XDebug",
+            "derived": false,
+            "kind": "script",
+            "target": "checks/xdebug.sh",
+            "expect": "",
+            "wait": 60
+          }
+        ]
+      },
+      {
+        "position": "xdebug2",
+        "machine": "xdebug2",
+        "runner": "isoloom-check-xdebug2",
+        "checks": [
+          {
+            "name": "xdebug3:80 from xdebug2",
+            "derived": true,
+            "kind": "http",
+            "target": "http://10.60.240.11:80/",
+            "expect": "any",
+            "wait": 30
+          }
+        ]
+      },
+      {
+        "position": "xdebug3",
+        "machine": "xdebug3",
+        "runner": "isoloom-check-xdebug3",
+        "checks": [
+          {
+            "name": "xdebug2:80 from xdebug3",
+            "derived": true,
+            "kind": "http",
+            "target": "http://10.60.240.10:80/",
+            "expect": "any",
+            "wait": 30
+          }
+        ]
+      }
+    ]
+  },
+  "message": "PHP with XDebug 2 answers at http://localhost:8080/ and with XDebug 3 at\nhttp://localhost:8081/. Read the xdebug section of phpinfo: where does it connect?\n"
+}

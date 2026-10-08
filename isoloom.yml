@@ -1,0 +1,40 @@
+# yaml-language-server: $schema=https://www.isoloom.com/schema/v1.json
+# PHP XDebug remote debugging RCE (Vulhub, by phith0n and the Vulhub contributors) as an Isoloom spec:
+# Vulhub's php/xdebug-rce, vendored in build/xdebug2/app/: the published images
+# vulhub/php:7.1-xdebug and vulhub/php:7.4-xdebug with index.php copied in.
+# `isoloom generate`, then `isoloom run docker`.
+version: 1
+name: vulhub-php-xdebug-rce
+
+networks:
+  lab: { cidr: 10.60.240.0/24, internet: true }  # XDebug connects back to the player's debugger client
+
+machines:
+  xdebug2:
+    networks: { lab: 10 }
+    services: [{ port: 80, name: web, http: true, publish: 8080 }]
+    resources: { cpus: 1, memory_mb: 256 }
+    docker:
+      build: build/xdebug2
+
+  xdebug3:
+    networks: { lab: 11 }
+    services: [{ port: 80, name: web, http: true, publish: 8081 }]
+    resources: { cpus: 1, memory_mb: 256 }
+    docker:
+      build: build/xdebug3
+
+checks:
+  - name: the XDebug 2 site answers
+    http: http://xdebug2/
+    wait: 60
+  - name: the XDebug 3 site answers
+    http: http://xdebug3/
+    wait: 60
+  - name: both sites run XDebug
+    script: checks/xdebug.sh
+    wait: 60
+
+message: |
+  PHP with XDebug 2 answers at http://localhost:{{ machines.xdebug2.services.0.publish }}/ and with XDebug 3 at
+  http://localhost:{{ machines.xdebug3.services.0.publish }}/. Read the xdebug section of phpinfo: where does it connect?
