@@ -4,11 +4,5 @@
   "question": "Exploit the XDebug connect-back to run code on a PHP server and get a shell.",
   "category": "WEB",
   "difficulty": 3,
-  "evidence_kind": "SECRET",
-  "capabilities": [
-    "remote-code-execution",
-    "debugger-exposure",
-    "dbgp",
-    "php"
-  ]
+  "evidence_kind": "SECRET"
 }
