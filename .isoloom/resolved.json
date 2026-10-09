@@ -136,7 +136,8 @@
       "vagrant": "needs `vm:` on xdebug2, xdebug3",
       "proxmox": "needs `vm:` on xdebug2, xdebug3",
       "cloud-vm": "needs `vm:` on xdebug2, xdebug3",
-      "external": "needs `external:` on xdebug2, xdebug3"
+      "external": "needs `external:` on xdebug2, xdebug3",
+      "cloud-services": "left out by `targets:`"
     }
   },
   "checks": {

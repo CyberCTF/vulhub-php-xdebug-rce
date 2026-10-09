@@ -9,6 +9,9 @@ services:
   xdebug2:
     build:
       context: ../../build/xdebug2
+      labels:
+        isoloom.managed: 'true'
+        isoloom.environment: vulhub-php-xdebug-rce
     image: isoloom/vulhub-php-xdebug-rce-xdebug2
     platform: linux/amd64
     hostname: xdebug2
@@ -40,10 +43,15 @@ services:
           memory: 256M
     labels:
       isoloom.service.web: http:80
+      isoloom.managed: 'true'
+      isoloom.environment: vulhub-php-xdebug-rce
     restart: unless-stopped
   xdebug3:
     build:
       context: ../../build/xdebug3
+      labels:
+        isoloom.managed: 'true'
+        isoloom.environment: vulhub-php-xdebug-rce
     image: isoloom/vulhub-php-xdebug-rce-xdebug3
     platform: linux/amd64
     hostname: xdebug3
@@ -75,6 +83,8 @@ services:
           memory: 256M
     labels:
       isoloom.service.web: http:80
+      isoloom.managed: 'true'
+      isoloom.environment: vulhub-php-xdebug-rce
     restart: unless-stopped
   isoloom-check:
     image: curlimages/curl:8.11.1
@@ -93,6 +103,9 @@ services:
         condition: service_healthy
       xdebug3:
         condition: service_healthy
+    labels:
+      isoloom.managed: 'true'
+      isoloom.environment: vulhub-php-xdebug-rce
   isoloom-check-xdebug2:
     image: curlimages/curl:8.11.1
     profiles:
@@ -108,6 +121,9 @@ services:
         condition: service_healthy
       xdebug3:
         condition: service_healthy
+    labels:
+      isoloom.managed: 'true'
+      isoloom.environment: vulhub-php-xdebug-rce
   isoloom-check-xdebug3:
     image: curlimages/curl:8.11.1
     profiles:
@@ -123,6 +139,9 @@ services:
         condition: service_healthy
       xdebug3:
         condition: service_healthy
+    labels:
+      isoloom.managed: 'true'
+      isoloom.environment: vulhub-php-xdebug-rce
   isoloom-probe-amd64:
     image: busybox:1.37.0-musl
     platform: linux/amd64
@@ -134,11 +153,20 @@ services:
     - isoloom-probe-amd64:/probe
     network_mode: none
     restart: no
+    labels:
+      isoloom.managed: 'true'
+      isoloom.environment: vulhub-php-xdebug-rce
 networks:
   lab:
     ipam:
       config:
       - subnet: 10.60.240.0/24
         gateway: 10.60.240.1
+    labels:
+      isoloom.managed: 'true'
+      isoloom.environment: vulhub-php-xdebug-rce
 volumes:
-  isoloom-probe-amd64: {}
+  isoloom-probe-amd64:
+    labels:
+      isoloom.managed: 'true'
+      isoloom.environment: vulhub-php-xdebug-rce
