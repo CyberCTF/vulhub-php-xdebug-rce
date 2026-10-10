@@ -1,7 +1,7 @@
 {
   "title": "PHP XDebug Remote Debugging Code Execution",
   "description": "Two PHP sites with XDebug remote debugging enabled and connect-back on: a request with XDEBUG_SESSION_START makes XDebug connect to the requester's address, and the DBGp eval command from that debugger runs PHP code on the server.",
-  "question": "Exploit the XDebug connect-back to run code on a PHP server and get a shell.",
+  "question": "Exploit the XDebug connect-back to run code on a PHP server and read /ctf/flag.",
   "category": "WEB",
   "difficulty": 3,
   "evidence_kind": "SECRET"

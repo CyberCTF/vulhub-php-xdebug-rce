@@ -1,0 +1,62 @@
+{
+  "objectives": [
+    {
+      "key": "main",
+      "title": "Read the flag",
+      "prompt": "Make XDebug connect back to your debugger, run PHP code on a server and read /ctf/flag.",
+      "check": {
+        "evidence": "SECRET",
+        "format": "FLAG{%s}"
+      },
+      "dev": "FLAG{dev-vulhub-php-xdebug-rce}",
+      "hints": [
+        "Read the xdebug section of phpinfo: remote debugging is on and the server connects back to the address that made the request.",
+        "A DBGp debugger can ask the engine to evaluate code. The flag is at /ctf/flag on each machine."
+      ],
+      "steps": [
+        {
+          "key": "extension",
+          "title": "Identify the extension",
+          "prompt": "Which PHP extension is enabled for remote debugging on both sites?",
+          "check": {
+            "answer": [
+              "xdebug"
+            ]
+          }
+        },
+        {
+          "key": "setting",
+          "title": "Find the setting",
+          "prompt": "Which XDebug 2 setting makes the server connect back to the requesting client's address? (setting name)",
+          "check": {
+            "answer": [
+              "xdebug.remote_connect_back",
+              "remote_connect_back"
+            ]
+          }
+        },
+        {
+          "key": "trigger",
+          "title": "Trigger a session",
+          "prompt": "Which request parameter or cookie name starts a debugging session?",
+          "check": {
+            "answer": [
+              "xdebug_session_start",
+              "xdebug_session"
+            ]
+          }
+        },
+        {
+          "key": "protocol",
+          "title": "Name the protocol",
+          "prompt": "Which debugging protocol does XDebug speak to the debugger? (acronym)",
+          "check": {
+            "answer": [
+              "dbgp"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
