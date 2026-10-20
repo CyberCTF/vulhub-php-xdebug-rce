@@ -39,7 +39,7 @@ machines:
       web:
         port: 80
         protocol: http
-        publish: true
+        publish: 8081
     files:
       - path: /run/lab/ctf_flag_main
         input: CTF_FLAG_MAIN
